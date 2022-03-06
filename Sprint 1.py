@@ -91,6 +91,22 @@ def api_add():
     query = "INSERT INTO vacations (destinationid, transportation, startdate, enddate) VALUES (%d, '%s', '%s', '%s')" % (destination_id, transport, startd, endd)
     execute_query(conn, query)
 
-    return "Add request succesful"    
+    return "Add request succesful"   
+
+
+#API to delete a plan from the vacations table
+@app.route('/api/vacation', methods=['DELETE'])
+def api_delete():
+    conn = create_con("database2.c7gxabw0pbmb.us-east-2.rds.amazonaws.com", "moimoi", "3n$Eri0pls", "database2db")    #Conection to SQL database
+    request_data = request.get_json()
+    if "id" in request_data:   #Only proceed if id provided as argument
+        id = int(request_data["id"])
+        delete_query = "DELETE FROM vacations WHERE id = %d" % (id)
+        execute_query(conn, delete_query)    #Execute query that deletes requested vacation
+
+    else:
+        return "ERROR: No id provided"
+
+    return "Delete request succesful"  
 
 app.run()
