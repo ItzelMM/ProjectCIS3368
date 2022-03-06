@@ -66,4 +66,31 @@ def api_update_plan():
 
     return "Update request succesful"
 
+
+#API to add a vacation plan to the vacations table
+@app.route('/api/vacation', methods=['PUT'])
+def api_add():
+    conn = create_con("database2.c7gxabw0pbmb.us-east-2.rds.amazonaws.com", "moimoi", "3n$Eri0pls", "database2db")    #Conection to SQL database
+    request_data = request.get_json()
+    transport = request_data["transportation"]  
+    startd = request_data["startdate"]
+    endd = request_data["enddate"]
+    #I'm assuming that the city has to also be entered in the request information to get the destinationid that matches the city
+    city = request_data["city"]
+
+
+    #With this query I'm getting the destination record of the city requested
+    query_id = "SELECT * FROM destionation WHERE city = '%s'" % (city)
+    specific_destination = execute_read_query(conn, query_id)    #Creates connection and selects all destinations with the specified city from destination table
+
+    #This loop extracts the destination id from the destination record with the requested city
+    for info_destination in specific_destination:         
+        destination_id = int(info_destination["id"])
+
+    # This query adds the new animal to the zoo table
+    query = "INSERT INTO vacations (destinationid, transportation, startdate, enddate) VALUES (%d, '%s', '%s', '%s')" % (destionation_id, transport, startd, endd)
+    execute_query(conn, query)
+
+    return "Add request succesful"    
+
 app.run()
