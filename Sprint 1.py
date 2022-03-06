@@ -27,7 +27,7 @@ def api_plans():
 
 
 # API to get a specific vacation plan based on the id of the plan
-@app.route('/api/animal', methods=['GET'])
+@app.route('/api/vacation', methods=['GET'])
 def api_plan():
     if "id" in request.args:   #Only proceed if id provided as argument
         id = int(request.args["id"])
@@ -45,5 +45,25 @@ def api_plan():
             results.append(plan)        #Appends only the information of the id that matches the argument id
 
     return jsonify(results)
+
+
+#API to update the values of a vacation plan in the zoo table
+@app.route('/api/vacation', methods=['POST'])
+def api_update_plan():
+    conn = create_con("database2.c7gxabw0pbmb.us-east-2.rds.amazonaws.com", "moimoi", "3n$Eri0pls", "database2db")    #Conection to SQL database
+
+    request_data = request.get_json()      #Set request info as a dictionary and then iterate through it to get the different fields and correspoding values that need to be updated
+    if "id" in request_data:   #Only proceed if id provided as argument
+        id = int(request_data["id"])
+        del request_data["id"]
+        for field in request_data:
+            value = request_data[field]
+            # This query will be iterated to update the different values that have to be updated
+            update_query = "UPDATE vacations SET `%s` = '%s' WHERE id = %d" % (field, value, id)
+            execute_query(conn, update_query)
+    else:
+        return "ERROR: No id provided"
+
+    return "Update request succesful"
 
 app.run()
