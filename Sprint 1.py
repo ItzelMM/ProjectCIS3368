@@ -109,4 +109,19 @@ def api_delete():
 
     return "Delete request succesful"  
 
+
+# API to get all destionations
+@app.route('/api/destination/all', methods=['GET'])
+def api_plans():
+    conn = create_con("database2.c7gxabw0pbmb.us-east-2.rds.amazonaws.com", "moimoi", "3n$Eri0pls", "database2db")    #Conection to SQL database
+    query = "SELECT * FROM destination"
+
+    destinations = execute_read_query(conn, query)    #Creates connection and selects all destinations from the destination table
+    results = []
+
+    for destination in destinations:
+        results.append(destination)
+
+    return jsonify(results)
+
 app.run()
