@@ -88,7 +88,7 @@ def api_add():
         destination_id = int(info_destination["id"])
 
     # This query adds the new animal to the zoo table
-    query = "INSERT INTO vacations (destinationid, transportation, startdate, enddate) VALUES (%d, '%s', '%s', '%s')" % (destionation_id, transport, startd, endd)
+    query = "INSERT INTO vacations (destinationid, transportation, startdate, enddate) VALUES (%d, '%s', '%s', '%s')" % (destination_id, transport, startd, endd)
     execute_query(conn, query)
 
     return "Add request succesful"    
